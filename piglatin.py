@@ -11,13 +11,20 @@ class PigLatin:
         if self.phrase == "":
             return "nil"
 
-        vowels = "aeiouAEIOU"
-        if len(self.phrase.split()) == 1 and self.phrase[0] in vowels:
-            if self.phrase[-1] == "y":
-                return self.phrase + "nay"
-            elif self.phrase[-1] in vowels:
-                return self.phrase + "yay"
+        words = self.phrase.split()
+        if len(words) == 1:
+            word = words[0]
+            vowels = "aeiouAEIOU"
+
+            if word[0] in vowels:
+                if word[-1] == "y":
+                    return word + "nay"
+                elif word[-1] in vowels:
+                    return word + "yay"
+                else:
+                    return word + "ay"
+
             else:
-                return self.phrase + "ay"
+                return word[1:] + word[0] + "ay"
 
         return ""

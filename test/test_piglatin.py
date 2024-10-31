@@ -2,6 +2,7 @@
 import unittest
 from piglatin import PigLatin
 
+
 class TestPigLatin(unittest.TestCase):
 
     def test_get_phrase(self):
@@ -21,6 +22,11 @@ class TestPigLatin(unittest.TestCase):
 
         translator_ask = PigLatin("ask")
         self.assertEqual(translator_ask.translate(), "askay")
+
+    def test_translate_word_starting_with_consonant(self):
+        translator_hello = PigLatin("hello")
+        self.assertEqual(translator_hello.translate(), "ellohay")
+
 
 if __name__ == "__main__":
     unittest.main()
