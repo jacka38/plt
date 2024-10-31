@@ -24,7 +24,12 @@ class PigLatin:
                 else:
                     return word + "ay"
 
-            else:
-                return word[1:] + word[0] + "ay"
+            consonant_cluster = ""
+            for char in word:
+                if char in vowels:
+                    break
+                consonant_cluster += char
+
+            return word[len(consonant_cluster):] + consonant_cluster + "ay"
 
         return ""
