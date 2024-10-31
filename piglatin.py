@@ -11,25 +11,32 @@ class PigLatin:
         if self.phrase == "":
             return "nil"
 
+        translated_words = []
         words = self.phrase.split()
-        if len(words) == 1:
-            word = words[0]
-            vowels = "aeiouAEIOU"
 
-            if word[0] in vowels:
-                if word[-1] == "y":
-                    return word + "nay"
-                elif word[-1] in vowels:
-                    return word + "yay"
+        for word in words:
+            composite_words = word.split('-')
+            translated_composite = []
+
+            for composite_word in composite_words:
+                vowels = "aeiouAEIOU"
+
+                if composite_word[0] in vowels:
+                    if composite_word[-1] == "y":
+                        translated_composite.append(composite_word + "nay")
+                    elif composite_word[-1] in vowels:
+                        translated_composite.append(composite_word + "yay")
+                    else:
+                        translated_composite.append(composite_word + "ay")
                 else:
-                    return word + "ay"
+                    consonant_cluster = ""
+                    for char in composite_word:
+                        if char in vowels:
+                            break
+                        consonant_cluster += char
 
-            consonant_cluster = ""
-            for char in word:
-                if char in vowels:
-                    break
-                consonant_cluster += char
+                    translated_composite.append(composite_word[len(consonant_cluster):] + consonant_cluster + "ay")
 
-            return word[len(consonant_cluster):] + consonant_cluster + "ay"
+            translated_words.append('-'.join(translated_composite))
 
-        return ""
+        return ' '.join(translated_words)
