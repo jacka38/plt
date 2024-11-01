@@ -21,11 +21,14 @@ class PigLatin:
             core_word = ""
             trailing_punctuation = ""
             for i in range(len(word)):
-                if word[-(i+1)] in allowed_punctuation:
-                    trailing_punctuation = word[-(i+1)] + trailing_punctuation
+                if word[-(i + 1)] in allowed_punctuation:
+                    trailing_punctuation = word[-(i + 1)] + trailing_punctuation
                 else:
-                    core_word = word[:len(word)-i]
+                    core_word = word[:len(word) - i]
                     break
+
+            if not (core_word.isupper() or core_word.istitle() or core_word.islower()):
+                raise PigLatinError(f"Invalid case format: '{core_word}'")
 
             for char in core_word:
                 if not char.isalpha() and char != '-':
@@ -40,15 +43,16 @@ class PigLatin:
                     continue
 
                 vowels = "aeiouAEIOU"
+                is_upper = composite_word.isupper()
+                is_title = composite_word.istitle()
 
                 if composite_word[0] in vowels:
-                    if composite_word[-1] == "y":
-                        translated_composite.append(composite_word + "nay")
+                    if composite_word[-1] == 'y':
+                        translation = composite_word + ("NAY" if is_upper else "nay")
                     elif composite_word[-1] in vowels:
-                        translated_composite.append(composite_word + "yay")
+                        translation = composite_word + ("YAY" if is_upper else "yay")
                     else:
-                        translated_composite.append(composite_word + "ay")
-
+                        translation = composite_word + ("AY" if is_upper else "ay")
                 else:
                     consonant_cluster = ""
                     for char in composite_word:
@@ -56,8 +60,15 @@ class PigLatin:
                             break
                         consonant_cluster += char
 
-                    translated_core = composite_word[len(consonant_cluster):] + consonant_cluster + "ay"
-                    translated_composite.append(translated_core)
+                    translation = composite_word[len(consonant_cluster):] + consonant_cluster + (
+                        "AY" if is_upper else "ay")
+
+                if is_title:
+                    translation = translation.capitalize()
+                elif is_upper:
+                    translation = translation.upper()
+
+                translated_composite.append(translation)
 
             translated_word = '-'.join(translated_composite) + trailing_punctuation
             translated_words.append(translated_word)
